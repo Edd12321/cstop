@@ -30,7 +30,7 @@
 #define $YELLOW_FG "\e[1;33m"
 #define $HEADER    "\e[0;30;42m"
 
-#define $RESET          "\e[0m"
+#define $RESET     "\e[0m"
 
 #define $SIGN(X) {               \
    if (elems[X][0] == '-')       \
@@ -64,27 +64,27 @@ is_pid(uc *str)
 extern void
 stats(ll rows, ll columns)
 {
-    FILE *fin;
-
-    /***** UPTIME & LOADAVG BEGIN *****/
+	FILE *fin;
+		
+	/***** UPTIME & LOADAVG BEGIN *****/
 	/**************/
 	/**  uptime  **/
 	/**************/
-    fin = fopen("/proc/uptime", "r");
-    float up1, up2;
-    ull up1_h, up1_m, up1_s,
-        up2_h, up2_m, up2_s;
+	fin = fopen("/proc/uptime", "r");
+	float up1, up2;
+	ull up1_h, up1_m, up1_s,
+		up2_h, up2_m, up2_s;
 
-    fscanf(fin, "%f %f", &up1, &up2);
+	fscanf(fin, "%f %f", &up1, &up2);
 	fclose(fin);
 	/* calculate H:m:s from seconds */
-    up1_h = up1 / (60*60); up2_h = up2 / (60*60);
-    up1  -= up1_h*(60*60); up2  -= up2_h*(60*60);
+	up1_h = up1 / (60*60); up2_h = up2 / (60*60);
+	up1  -= up1_h*(60*60); up2	-= up2_h*(60*60);
 
-    up1_m = up1 / 60; up2_m = up2 / 60;
-    up1  -= up1_m*60; up2  -= up2_m*60;
+	up1_m = up1 / 60; up2_m = up2 / 60;
+	up1  -= up1_m*60; up2  -= up2_m*60;
 
-    up1_s = up1; up2_s = up2;
+	up1_s = up1; up2_s = up2;
 
 	/***************/
 	/**  loadavg  **/
@@ -94,32 +94,32 @@ stats(ll rows, ll columns)
 	size_t len;
 	getline(&loadavg, &len, fin);
 	fclose(fin);
-
-    printf("cstop - UpTime: real %s%02d:%02d:%02d%s cpu %s%02d:%02d:%02d%s loadavg %s%s%s",
-            $BOLD_FG, up1_h, up1_m, up1_s, $RESET,
-            $BOLD_FG, up2_h, up2_m, up2_s, $RESET,
+	
+	printf("cstop - UpTime: real %s%02d:%02d:%02d%s cpu %s%02d:%02d:%02d%s loadavg %s%s%s",
+			$BOLD_FG, up1_h, up1_m, up1_s, $RESET,
+			$BOLD_FG, up2_h, up2_m, up2_s, $RESET,
 			$BOLD_FG, loadavg, $RESET);
-    /***** UPTIME  & LOADAVG END *****/
+	/***** UPTIME  & LOADAVG END *****/
 
-    /***** TASKS BEGIN *****/
+	/***** TASKS BEGIN *****/
 
-    printf("Tasks: %s%d%s total, %s%d%s running, %s%d%s sleeping, %s%d%s stopped, %s%d%s zombie\n",
-           $BOLD_FG, tasks,    $RESET,
+	printf("Tasks: %s%d%s total, %s%d%s running, %s%d%s sleeping, %s%d%s stopped, %s%d%s zombie\n",
+		   $BOLD_FG, tasks,    $RESET,
 		   $BOLD_FG, tasks_rn, $RESET,
 		   $BOLD_FG, tasks_sl, $RESET,
 		   $BOLD_FG, tasks_st, $RESET,
 		   $BOLD_FG, tasks_zb, $RESET);
-    /***** TASKS END *****/
-
-    /***** %CPU BEGIN *****/
+	/***** TASKS END *****/
+	
+	/***** %CPU BEGIN *****/
 	fin = fopen("/proc/stat", "r");
-
+	
 	char *names[10] = {"us", "sy", "ni", "id", "wa", "hi", "si", "st", "gu", "gn"};
 	ui varbs[10];
 	float sum = 0;
-	
+		
 	printf("%cCpu(s): ", '%');
-
+	
 	fscanf(fin, "cpu: %u", &varbs[0]);
 	for (int i = 1; i < 10; ++i) {
 		fscanf(fin, "%u", &varbs[i]);
@@ -131,9 +131,9 @@ stats(ll rows, ll columns)
 	fclose(fin);
 	for (int i = 0; i < 10; ++i)
 		printf("%s%.2f%s %s  ", $BOLD_FG, (varbs[i]/sum)*100.0, $RESET, names[i]);
-
-    /***** %CPU END *****/
-    putchar('\n');
+	
+	/***** %CPU END *****/
+	putchar('\n');
 }
 
 /** Display multiples of 1024 as KiB, MiB, GiB, ...
@@ -199,7 +199,7 @@ table(ll rows, ll columns)
 		if (x_pos <= 8) { printf("%6cCPU",'%'); space_left += 5; }
 		if (x_pos <= 9) { printf("%4cMEM",'%'); space_left += 4; }
 		if (x_pos <=10) { printf( "    +TIME"); space_left += 9; }
-          /* nothing */ { printf(  " Command"); space_left +=15; }
+		  /* nothing */ { printf(  " Command"); space_left +=15; }
 
 		for (int i = 0; i < columns - space_left; ++i)
 			putchar(' ');
@@ -208,55 +208,55 @@ table(ll rows, ll columns)
 		ui row_check = 0;
 		while ((f = readdir(d)) != NULL) {
 			if (is_pid(f->d_name)) {
-                /***************************************************************************/
-                /** INITIALIZE elems[25] TO BE USED IN PRINTING/CALCULATING PROCESS COUNT **/
-                /***************************************************************************/
-                uc pps[MAGIC];
-                sprintf(pps, "/proc/%s/stat", f->d_name);
-                FILE *fp = fopen(pps, "r");
+				/***************************************************************************/
+				/** INITIALIZE elems[25] TO BE USED IN PRINTING/CALCULATING PROCESS COUNT **/
+				/***************************************************************************/
+				uc pps[MAGIC];
+				sprintf(pps, "/proc/%s/stat", f->d_name);
+				FILE *fp = fopen(pps, "r");
 
-                /* init for getdelim() with space separators */
-                ssize_t len = 0;
-                int j = 0;
-                char *elems[52] = {NULL};
+				/* init for getdelim() with space separators */
+				ssize_t len = 0;
+				int j = 0;
+				char *elems[52] = {NULL};
 
-                /* don't tokenize paren contents */
-                elems[0] = malloc(9);
-                fscanf(fp, "%s (", elems[0]);
-                /* begin reading to pointer */
-                elems[1] = malloc(4097);
-                uc tmp = '\0';
-                for ever {
-                    tmp = fgetc(fp);
-                    if (tmp == ')')
-                        break;
-                    else
-                        elems[1][j++] = tmp;
-                }
-                /* read space */
-                fgetc(fp);
+				/* don't tokenize paren contents */
+				elems[0] = malloc(9);
+				fscanf(fp, "%s (", elems[0]);
+				/* begin reading to pointer */
+				elems[1] = malloc(4097);
+				uc tmp = '\0';
+				for ever {
+					tmp = fgetc(fp);
+					if (tmp == ')')
+						break;
+					else
+						elems[1][j++] = tmp;
+				}
+				/* read space */
+				fgetc(fp);
 
-                for (j = 2; j < 52; ++j)
-                    getdelim(&elems[j], &len, ' ', fp);
-                fclose(fp);
+				for (j = 2; j < 52; ++j)
+					getdelim(&elems[j], &len, ' ', fp);
+				fclose(fp);
 
-                /* found a proc! */
-                ++tasks;
-                switch(elems[2][0]) {
-                case 'R':
-                    ++tasks_rn;
-                    break;
-                case 'S': //FALLTHROUGH
-                case 'I':
-                    ++tasks_sl;
-                    break;
-                case 'T':
-                    ++tasks_st;
-                    break;
-                case 'Z':
-                    ++tasks_zb;
-                    break;
-                }
+				/* found a proc! */
+				++tasks;
+				switch(elems[2][0]) {
+				case 'R':
+					++tasks_rn;
+					break;
+				case 'S': //FALLTHROUGH
+				case 'I':
+					++tasks_sl;
+					break;
+				case 'T':
+					++tasks_st;
+					break;
+				case 'Z':
+					++tasks_zb;
+					break;
+				}
 
 				if (k >= y_pos && k < y_pos + rows) {
 					/* check how many of the rows contain processes */
@@ -265,7 +265,7 @@ table(ll rows, ll columns)
 						c_task = atoll(f->d_name);
 						printf("%s>>%s", $YELLOW_FG, $RESET);
 					} else {
-                        printf("  ");
+						printf("  ");
 					}
 					/*******************************************************/
 					/** READ /proc/<pid>/stat CONTENTS AND PRINT THEM OUT **/
@@ -278,7 +278,7 @@ table(ll rows, ll columns)
 					}
 					if (x_pos <= 1) {
 						/*****************************/
-						/**       PRINT USER        **/
+						/**        PRINT USER       **/
 						/*****************************/
 						struct stat strat;
 						stat(pps, &strat);
@@ -295,7 +295,7 @@ table(ll rows, ll columns)
 					}
 					if (x_pos <= 3) {
 						/*****************************/
-						/**       PRINT NICE        **/
+						/**        PRINT NICE       **/
 						/*****************************/
 						$SIGN(18);
 						printf("%4s%s ", elems[18], $RESET);
@@ -323,7 +323,7 @@ table(ll rows, ll columns)
 						sprintf(fn, "/proc/%s/statm", f->d_name);
 
 						FILE *fin = fopen(fn, "r");
-						ull tmp;    /* dummy variable */
+						ull tmp;	/* dummy variable */
 						ull shared; /* what we're actually gonna use */
 
 						/* get 3rd content of /proc/<pid>/statm */
@@ -354,8 +354,8 @@ table(ll rows, ll columns)
 
 						/* formula elements */
 						ull utime = atoll(elems[13]),
-						    stime = atoll(elems[14]),
-					       cutime = atoll(elems[15]),
+							stime = atoll(elems[14]),
+						   cutime = atoll(elems[15]),
 						   cstime = atoll(elems[16]),
 						starttime = atoll(elems[21]);
 
@@ -371,35 +371,35 @@ table(ll rows, ll columns)
 					}
 					if (x_pos <= 9) {
 						/*****************************/
-						/**        PRINT %MEM       **/
+						/*         PRINT %MEM       **/
 						/*****************************/
 						/* get the total memory so we can calculate the percentage */
-                        FILE *fin;
+						FILE *fin;
 
 						ull memtotal = 0L;
-						ull size     = 0L;
+						ull size	 = 0L;
 
 						fin = fopen("/proc/meminfo", "r");
 						/* read the first value into a buffer */
 						fscanf(fin, "MemTotal: %ul kB\n", &memtotal);
 						fclose(fin);
 
-                        /* vsize is stored in elems[23] */
-                        size = atoll(elems[23]);
+						/* vsize is stored in elems[23] */
+						size = atoll(elems[23]);
 						/* convert KiB to B */
-						memtotal <<= 1;
+						memtotal <<= 10;
 
-                        printf("%7.2f", (float)size/(float)memtotal*100);
+						printf("%7.2f", (float)size/(float)memtotal*100);
 					}
 					if (x_pos <= 10) {
 						/*****************************/
 						/**       PRINT TIME+       **/
 						/*****************************/
 						/* get full path*/
-						uc          fn[MAGIC];
+						uc			fn[MAGIC];
 						struct stat strat;
-						time_t      ptime;
-						struct tm   ftime;
+						time_t		ptime;
+						struct tm	ftime;
 
 						sprintf(fn, "/proc/%s", f->d_name);
 						stat(fn, &strat);
@@ -410,7 +410,7 @@ table(ll rows, ll columns)
 
 						printf(" %02d:%02d:%02d ", ftime.tm_hour, ftime.tm_min, ftime.tm_sec);
 					}
-                    /**(nothing)**/ {
+					/**(nothing)**/ {
 						/*****************************/
 						/**       PRINT COMMS       **/
 						/*****************************/
@@ -419,62 +419,62 @@ table(ll rows, ll columns)
 
 						int max_llength, modifier;
 						if (x_pos < $MAX_XPOS) {
-                            max_llength = columns-space_left+6;
-                            modifier = 0;
-                        } else {
-                            max_llength = columns-2;
-                            modifier = x_pos;
-                        }
+							max_llength = columns-space_left+6;
+							modifier = 0;
+						} else {
+							max_llength = columns-2;
+							modifier = x_pos;
+						}
 
 						sprintf(fn, "/proc/%s/cmdline", f->d_name);
 						/* check if cmdline exists. If not, print comm.*/
 						FILE *fin = fopen(fn, "r");
 						int ch = fgetc(fin);
 						if (ch == EOF)
-                            sprintf(fn, "/proc/%s/comm\0", f->d_name);
-                        else
-                            ungetc(ch, fin);
-                        fclose(fin);
+							sprintf(fn, "/proc/%s/comm\0", f->d_name);
+						else
+							ungetc(ch, fin);
+						fclose(fin);
 
-						int fd   = open(fn, O_RDONLY);
+						int fd	 = open(fn, O_RDONLY);
 						int size = read(fd, buf, MAGIC2);
-                        /* remove trailing newline from the buffer, if it exists */
-                        int lc = strlen(buf)-1;
-                        if (buf[lc] == '\n') {
-                            buf[lc] = '\0';
-                            /* as /proc/<pid>/cmdline doesn't have trailing newlines at all, it
-                               is safe to assume that the file in question is /proc/<pid>/comm.
+						/* remove trailing newline from the buffer, if it exists */
+						int lc = strlen(buf)-1;
+						if (buf[lc] == '\n') {
+							buf[lc] = '\0';
+							/* as /proc/<pid>/cmdline doesn't have trailing newlines at all, it
+							   is safe to assume that the file in question is /proc/<pid>/comm.
 
-                               As cstop marks these two files with different colors, this is what
-                               we're going to do here. */
-                            printf($GREEN_FG);
-                        }
+							   As cstop marks these two files with different colors, this is what
+							   we're going to do here. */
+							printf($GREEN_FG);
+						}
 
 						uc *ptr = buf;
 						uc *end = buf+size;
 
 						for ( ;ptr < end; ) {
-                            for (int i = 0;;++i) {
-                                /* only print enough to fit to the screen */
-                                if (i < max_llength) {
-                                    /* if we reached out of bounds, print an empty space */
-                                    if (ptr[i+modifier])
-                                        putchar(ptr[i+modifier]);
-                                    else
-                                        putchar(' ');
-                                } else {
-                                    /* don't let the line cut off the screen */
-                                    goto __table_func_next;
-                                }
-                            }
-                            /* next command arg */
-                            while (*ptr++);
+							for (int i = 0;;++i) {
+								/* only print enough to fit to the screen */
+								if (i < max_llength) {
+								   /* if we reached out of bounds, print an empty space */
+									if (ptr[i+modifier])
+										putchar(ptr[i+modifier]);
+									else
+										putchar(' ');
+								} else {
+									/* don't let the line cut off the screen */
+									goto __table_func_next;
+								}
+							}
+							/* next command arg */
+							while (*ptr++);
 						}
 __table_func_next:
-                        /* in case the command was marked as /proc/<pid>/comm */
-                        printf($RESET);
-                        close(fd);
-                    }
+						/* in case the command was marked as /proc/<pid>/comm */
+						printf($RESET);
+						close(fd);
+					}
 					putchar('\n');
 					/*** FREE POINTERS ***/
 					free(elems[0]);
