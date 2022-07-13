@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1657676009 source:/home/edward/.dots/work/cstop/main.c
+	<sys/ioctl.h>
+	<signal.h>
+	"proc.h"
+	"keys.h"
+
+1657676679 /home/edward/.dots/work/cstop/proc.h
+	<sys/stat.h>
+	<dirent.h>
+	<fcntl.h>
+	<limits.h>
+	<pwd.h>
+	<stdbool.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<unistd.h>
+	"global.h"
+
+1657676031 /home/edward/.dots/work/cstop/global.h
+	<stdbool.h>
+
+1657646894 /home/edward/.dots/work/cstop/keys.h
+	<sys/select.h>
+	<termios.h>
+	<unistd.h>
+	"global.h"
+
+1657581599 /home/edward/.dots/work/cstop/pid.h
+
