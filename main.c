@@ -57,6 +57,12 @@ init_vars(void)
 	columns = term.ws_col;
 }
 
+static inline void
+handle_winch(int sig)
+{
+	init_vars();
+}
+
 /** Clears the screen
  *
  * @param  none
@@ -75,6 +81,7 @@ main(void)
 	/* everything happens in the files below */
 	$CURSOR_HIDE();
 	signal(SIGINT, handle_sig);
+	signal(SIGWINCH, handle_winch);
 
 	for ever {
 		clrscr();
